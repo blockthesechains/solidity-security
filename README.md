@@ -20,6 +20,14 @@ Hands-on smart contract security: common vulnerabilities shown next to their har
 
 **The proof** (`AccessControl.t.sol`): on the vulnerable contract a random attacker drains the full balance; on the secured one that same call reverts and the funds stay safe, while the owner can still withdraw.
 
+## 3. Reward Accounting & Flash-Loan Manipulation
+
+**The bug** (`RewardPoolVulnerable.sol`): a staking pool pays rewards based on a staker's *instantaneous* share at claim time, with no record of what's been claimed. This enables unbounded repeated claims and — devastatingly — a flash-loan stake that captures the entire reward pool in a single transaction with zero capital. Full write-up in [`findings/reward-pool.md`](findings/reward-pool.md).
+
+**The fix** (`RewardPoolSecured.sol`): a reward-per-token accumulator (Synthetix `StakingRewards` pattern) that keys rewards to stake × the time rewards existed, not instantaneous share. A flash-loaned stake earns nothing, and claims can't be repeated.
+
+**The proof** (`RewardPool.t.sol`): a flash-loan-style stake and a double-claim both earn zero, while an honest staker who was staked when rewards were added receives their full share.
+
 > The vulnerable contracts are for education only and are labeled "do not deploy."
 
 ## Running locally
