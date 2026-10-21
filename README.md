@@ -1,18 +1,26 @@
 # Solidity Security Patterns
 
-Hands-on smart contract security: a common vulnerability shown next to its hardened fix, with a test that proves the fix holds under attack. Built with Solidity, OpenZeppelin, and Hardhat 3.
+Hands-on smart contract security: common vulnerabilities shown next to their hardened fixes, each with a test that proves the fix holds. Built with Solidity, OpenZeppelin, and Hardhat 3.
 
-## Reentrancy
+## 1. Reentrancy
 
-**The bug** (`ReentrancyBankVulnerable.sol`): the classic mistake, it sends ETH *before* updating the user's balance. A malicious contract can re-enter `withdraw()` during the transfer and drain funds. This is the flaw behind The DAO hack (2016).
+**The bug** (`ReentrancyBankVulnerable.sol`): sends ETH *before* updating the balance, so a malicious contract can re-enter `withdraw()` and drain funds. The flaw behind The DAO hack (2016).
 
 **The fix** (`ReentrancyBankSecured.sol`): two layered defenses.
-1. **Checks-Effects-Interactions** — balances update *before* the external call, so a reentrant call fails the balance check. This is the primary fix.
-2. **ReentrancyGuard (`nonReentrant`)** — OpenZeppelin's guard blocks any nested call as a backstop (defense in depth).
+1. **Checks-Effects-Interactions** — state updates *before* the external call. Primary fix.
+2. **ReentrancyGuard (`nonReentrant`)** — blocks nested calls as a backstop.
 
-**The proof** (`ReentrancyBankSecured.t.sol`): an attacker deposits 1 ETH, then tries to re-enter `withdraw()` to steal a victim's 10 ETH. The test confirms the reentry is attempted but blocked, the attacker recovers only their own 1 ETH, and the victim's funds stay untouched.
+**The proof** (`ReentrancyBankSecured.t.sol`): an attacker tries to re-enter `withdraw()` to steal a victim's 10 ETH. The reentry is blocked, the attacker gets only their own deposit back, and the victim's funds stay safe.
 
-> The vulnerable contract is for education only and is labeled "do not deploy."
+## 2. Access Control
+
+**The bug** (`AccessControlVulnerable.sol`): a `withdrawAll()` with no owner check — *any* address can call it and drain the contract. Missing access control is one of the most common real-world vulnerabilities.
+
+**The fix** (`AccessControlSecured.sol`): restricts the function with OpenZeppelin's `Ownable` + `onlyOwner`.
+
+**The proof** (`AccessControl.t.sol`): on the vulnerable contract a random attacker drains the full balance; on the secured one that same call reverts and the funds stay safe, while the owner can still withdraw.
+
+> The vulnerable contracts are for education only and are labeled "do not deploy."
 
 ## Running locally
 
