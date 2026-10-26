@@ -10,7 +10,7 @@ Hands-on smart contract security: common vulnerabilities shown next to their har
 1. **Checks-Effects-Interactions** — state updates *before* the external call. Primary fix.
 2. **ReentrancyGuard (`nonReentrant`)** — blocks nested calls as a backstop.
 
-**The proof** (`ReentrancyBankSecured.t.sol`): an attacker tries to re-enter `withdraw()` to steal a victim's 10 ETH. The reentry is blocked, the attacker gets only their own deposit back, and the victim's funds stay safe.
+**The proof** (`ReentrancyBankSecured.t.sol`): an attacker tries to re-enter `withdraw()` to steal a victim's 10 ETH. The reentry is blocked, the attacker gets only their own deposit back, and the victim's funds stay safe. Full write-up in [`findings/reentrancy-bank.md`](findings/reentrancy-bank.md).
 
 ## 2. Access Control
 
