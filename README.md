@@ -30,6 +30,12 @@ Hands-on smart contract security: common vulnerabilities shown next to their har
 
 > The vulnerable contracts are for education only and are labeled "do not deploy."
 
+## Practice Audits
+
+Self-directed audit passes on public training codebases, written up in the style of a competitive-audit report.
+
+- [`findings/puppyraffle-practice.md`](findings/puppyraffle-practice.md) — a full pass on Cyfrin's **PuppyRaffle** teaching contract, finding four bugs across four classes: reentrancy, weak randomness, unsafe cast/overflow, and an O(n²) denial-of-service. *(Training material — bugs are documented course content, not novel discoveries.)*
+
 ## Running locally
 
     npm install
