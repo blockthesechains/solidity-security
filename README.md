@@ -44,6 +44,10 @@ Self-directed audit passes on public training codebases, written up in the style
 
 - [`findings/puppyraffle-practice.md`](findings/puppyraffle-practice.md) — a full pass on Cyfrin's **PuppyRaffle** teaching contract, finding four bugs across four classes: reentrancy, weak randomness, unsafe cast/overflow, and an O(n²) denial-of-service. *(Training material — bugs are documented course content, not novel discoveries.)*
 
+## Damn Vulnerable DeFi
+
+Solved challenges from the [Damn Vulnerable DeFi v4](https://damnvulnerabledefi.xyz) wargame, each with a working Foundry PoC and a write-up of the bug class, exploit, and fix. See [`dvd-writeups/`](dvd-writeups/) — covers accounting-invariant breaks, flash-loan fee griefing, meta-transaction sender spoofing, arbitrary-call self-approval, flash-loan deposit double-credits, batch double-claims, flash-loan governance takeover, oracle key compromise, and Uniswap V1/V2 spot-price manipulation.
+
 ## Running locally
 
     npm install
