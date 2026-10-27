@@ -28,6 +28,14 @@ Hands-on smart contract security: common vulnerabilities shown next to their har
 
 **The proof** (`RewardPool.t.sol`): a flash-loan-style stake and a double-claim both earn zero, while an honest staker who was staked when rewards were added receives their full share.
 
+## 4. Signature Replay
+
+**The bug** (`SignedVaultVulnerable.sol`): a vault releases ETH on an owner's signature but records no nonce and no domain separation — so one valid signature can be replayed to withdraw again and again until the vault is empty. Behind many airdrop and meta-transaction exploits. Full write-up in [`findings/signature-replay.md`](findings/signature-replay.md).
+
+**The fix** (`SignedVaultSecured.sol`): three layers — a per-user **nonce** (each signature is single-use), **EIP-712** domain separation (binds signatures to this contract + chain), and OpenZeppelin **`ECDSA.recover`** (rejects malformed/malleable signatures).
+
+**The proof** (`SignedVault.t.sol`): the owner authorizes 1 ETH once; on the vulnerable vault the attacker replays that signature to drain 5 ETH, and on the secured vault the replay reverts — the attacker keeps only the 1 ETH they were granted.
+
 > The vulnerable contracts are for education only and are labeled "do not deploy."
 
 ## Practice Audits
